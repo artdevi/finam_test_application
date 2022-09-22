@@ -13,5 +13,11 @@ class HomeBloc extends Bloc<HomeEvent, HomeState> {
       failureOrData.fold((failure) => emit(HomeDataError(message: '')),
           (data) => emit(HomeDataLoaded(data: data)));
     });
+    on<PullToRefreshEvent>((event, emit) async {
+      emit(HomeDataLoading());
+      final failureOrData = await getData();
+      failureOrData.fold((failure) => emit(HomeDataError(message: '')),
+          (data) => emit(HomeDataLoaded(data: data)));
+    });
   }
 }
